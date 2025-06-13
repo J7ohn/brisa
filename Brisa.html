@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para minha Brisa 💛🌻</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff0f5, #fff8dc);
+      color: #4d2c2c;
+      text-align: center;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .center-screen, .photo-container, .message, #nextBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .center-screen {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .message {
+      font-size: 1.4em;
+      background-color: #fffaf0;
+      padding: 1em;
+      border-radius: 12px;
+      max-width: 90%;
+      max-height: 50vh;
+      overflow: auto;
+      box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+      animation: fadeInOut 10s ease-in-out;
+      margin: 1em auto;
+    }
+
+    .photo-container img {
+      max-width: 90vw;
+      max-height: 70vh;
+      transform: scale(0.9);
+      border-radius: 15px;
+      border: 4px solid #f9a602;
+      margin-top: 1em;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      animation: fadeInOut 8s ease-in-out;
+      object-fit: contain;
+    }
+
+    .next-button {
+      background-color: #ff69b4;
+      color: white;
+      padding: 0.8em 1.6em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      animation: pulse 2s infinite alternate;
+      margin-top: 2em;
+    }
+
+    .final-hearts {
+      position: absolute;
+      font-size: 2em;
+      color: rgba(255, 20, 147, 0.8);
+      pointer-events: none;
+      animation: fadeInOut 4s ease-in-out infinite;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes pulse {
+      0% {opacity: 0.8; transform: scale(1);}
+      100% {opacity: 1; transform: scale(1.05);}
+    }
+
+    @keyframes floatHearts {
+      0% {transform: translateY(0) scale(1); opacity: 1;}
+      100% {transform: translateY(-100vh) scale(1.5); opacity: 0;}
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      transform: rotate(45deg);
+      animation: floatHearts 10s linear infinite;
+    }
+
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: -10px; top: 0; }
+
+    #finaleContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .final-item {
+      flex: 1 1 250px;
+      max-width: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .final-item img {
+      max-width: 100%;
+      max-height: 200px;
+      border: 3px solid #f9a602;
+      border-radius: 12px;
+      object-fit: contain;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .final-item .message {
+      font-size: 1em;
+      margin-top: 10px;
+      padding: 0.6em;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bg-music">
+    <source src="18_by_one_direction_by_user_19.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="startScreen" class="center-screen">
+    <button class="next-button" onclick="startPresentation()">▶ Iniciar</button>
+  </div>
+
+  <div id="presentation" class="hidden center-screen">
+    <div id="messageBox" class="message hidden"></div>
+    <div class="photo-container hidden">
+      <img id="photo" src="" alt="Foto">
+    </div>
+    <button id="nextBtn" class="next-button hidden" onclick="showNext()">Está preparada para prosseguir? ➡</button>
+  </div>
+
+  <div id="finaleContainer" class="hidden"></div>
+
+  <script>
+    const messages = [
+      "Hoje começa a nossa viagem pelo amor...",
+      "Cada foto é uma lembrança que o meu coração guardou com carinho.",
+      "Você é a luz dos meus dias e o calor da minha alma.",
+      "Nada no mundo me faz sorrir como o seu abraço.",
+      "Essa jornada só vale a pena com você ao meu lado.",
+      "Te amo em cada detalhe, em cada momento.",
+      "Obrigado por ser meu presente mais bonito.",
+      "Com você, descobri o verdadeiro significado da felicidade.",
+      "Prometo continuar escrevendo nossa história com amor."
+    ];
+
+    const photos = [
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.02_d76d30ca.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.03_0c5b471c.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.03_2944893d.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.03_b9174728.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.04_8d480b92.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.04_ca997f59.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.04_e61d9dac.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.05_865018e1.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.04_9938be76.jpg",
+      "img/Imagem do WhatsApp de 2025-06-12 à(s) 13.04.05_99d3d39c.jpg"
+    ];
+
+    let index = 0;
+
+    function startPresentation() {
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("presentation").classList.remove("hidden");
+      document.getElementById("bg-music").play();
+      showNext();
+    }
+
+    function showNext() {
+      const messageBox = document.getElementById("messageBox");
+      const photo = document.getElementById("photo");
+      const photoContainer = document.querySelector(".photo-container");
+      const nextBtn = document.getElementById("nextBtn");
+
+      nextBtn.classList.add("hidden");
+      photoContainer.classList.add("hidden");
+      messageBox.classList.remove("hidden");
+
+      if (index < messages.length) {
+        messageBox.textContent = messages[index];
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+          photo.src = photos[index];
+          photoContainer.classList.remove("hidden");
+        }, 10000);
+
+        setTimeout(() => {
+          photoContainer.classList.add("hidden");
+          nextBtn.classList.remove("hidden");
+        }, 18000);
+
+        index++;
+      } else {
+        document.getElementById("presentation").classList.add("hidden");
+        document.getElementById("finaleContainer").classList.remove("hidden");
+        showFinale();
+      }
+    }
+
+    function showFinale() {
+      const container = document.getElementById("finaleContainer");
+      messages.forEach((msg, i) => {
+        const div = document.createElement("div");
+        div.className = "final-item";
+        const m = document.createElement("div");
+        m.className = "message";
+        m.textContent = msg;
+        const p = document.createElement("img");
+        p.src = photos[i];
+        div.appendChild(m);
+        div.appendChild(p);
+        container.appendChild(div);
+      });
+
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 10000);
+      }, 300);
+
+      setInterval(() => {
+        const word = document.createElement('div');
+        word.className = 'final-hearts';
+        word.textContent = 'Eu te amo';
+        word.style.top = Math.random() * 100 + '%';
+        word.style.left = Math.random() * 100 + '%';
+        document.body.appendChild(word);
+        setTimeout(() => word.remove(), 5000);
+      }, 500);
+    }
+  </script>
+</body>
+</html>
